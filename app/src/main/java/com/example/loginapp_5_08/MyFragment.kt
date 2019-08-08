@@ -37,7 +37,6 @@ class MyFragment : Fragment() {
         if (isEmailValid(email))
         {
             //view.findViewById<EditText>(R.id.editText1).setError( "First name is required!" )
-            Toast.makeText(activity, "Valid Email", Toast.LENGTH_SHORT).show()
             validtext1.visibility = View.INVISIBLE
 
             if (isValidPassword(pass))
