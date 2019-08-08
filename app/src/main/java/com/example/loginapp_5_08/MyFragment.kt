@@ -1,5 +1,6 @@
 package com.example.loginapp_5_08
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,13 +38,18 @@ class MyFragment : Fragment() {
         if (isEmailValid(email))
         {
             //view.findViewById<EditText>(R.id.editText1).setError( "First name is required!" )
-            Toast.makeText(activity, "Valid Email", Toast.LENGTH_SHORT).show()
             validtext1.visibility = View.INVISIBLE
 
             if (isValidPassword(pass))
             {
                 validtext2.visibility = View.INVISIBLE
 
+                val clickintent = Intent(activity, HomeScreen::class.java)
+                startActivity(clickintent)
+
+                activity?.finish()
+
+                /*
                 // build alert dialog
                 val dialogBuilder = android.app.AlertDialog.Builder(getActivity())
 
@@ -62,6 +68,7 @@ class MyFragment : Fragment() {
                 alert.setTitle("Logging In")
                 // show alert dialog
                 alert.show()
+                */
             }
             else
             {
@@ -84,45 +91,99 @@ class MyFragment : Fragment() {
         var valid = true
 
         // Password policy check
+
+        //Valid Length
+        if (!validLength(str.length))
+        {
+            valid = false
+        }
+
+        //atleast one number
+        if (!validNumber(str))
+        {
+            valid = false
+        }
+
+        //atleast one capital
+        if (!validCapital(str))
+        {
+            valid = false
+        }
+
+        //atleast one small
+        if (!validSmall(str))
+        {
+            valid = false
+        }
+
+        //atleast one special
+        if (!validSpecial(str))
+        {
+            valid = false
+        }
+
+        return valid
+    }
+
+    fun validLength(len : Int) : Boolean
+    {
         // Password should be minimum minimum 8 characters long
-        if (str.length < 6) {
-            valid = false
+        if (len < 6) {
+            return false
         }
+        return true
+    }
 
+    fun validNumber(str: String) : Boolean
+    {
         // Password should contain at least one number
-        var exp = ".*[0-9].*"
+        val exp = ".*[0-9].*"
+        val pattern = Pattern.compile(exp, Pattern.CASE_INSENSITIVE)
+        val matcher = pattern.matcher(str)
 
-        var pattern = Pattern.compile(exp, Pattern.CASE_INSENSITIVE)
-        var matcher = pattern.matcher(str)
         if (!matcher.matches()) {
-            valid = false
+            return false
         }
+        return true
+    }
 
+    fun validCapital(str: String) : Boolean
+    {
         // Password should contain at least one capital letter
-        exp = ".*[A-Z].*"
-        pattern = Pattern.compile(exp)
-        matcher = pattern.matcher(str)
-        if (!matcher.matches()) {
-            valid = false
-        }
+        val exp = ".*[A-Z].*"
+        val pattern = Pattern.compile(exp)
+        val matcher = pattern.matcher(str)
 
+        if (!matcher.matches()) {
+            return false
+        }
+        return true
+    }
+
+    fun validSmall(str: String) : Boolean
+    {
         // Password should contain at least one small letter
-        exp = ".*[a-z].*"
-        pattern = Pattern.compile(exp)
-        matcher = pattern.matcher(str)
-        if (!matcher.matches()) {
-            valid = false
-        }
+        val exp = ".*[a-z].*"
+        val pattern = Pattern.compile(exp)
+        val matcher = pattern.matcher(str)
 
+        if (!matcher.matches()) {
+            return false
+        }
+        return true
+    }
+
+    fun validSpecial(str: String) : Boolean
+    {
         // Password should contain at least one special character
         // Allowed special characters : "~!@#$%^&*()-_=+|/,."';:{}[]<>?"
-        exp = ".*[~!@#\$%\\^&*()\\-_=+\\|\\[{\\]};:'\",<.>/?].*"
-        pattern = Pattern.compile(exp)
-        matcher = pattern.matcher(str)
+        val exp = ".*[~!@#\$%\\^&*()\\-_=+\\|\\[{\\]};:'\",<.>/?].*"
+        val pattern = Pattern.compile(exp)
+        val matcher = pattern.matcher(str)
 
         if (!matcher.matches()) {
-            valid = false
+            return false
         }
-        return valid
+        return true
     }
 }
